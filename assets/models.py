@@ -22,13 +22,12 @@ class CategoryProperty(models.Model):
     def save(self, *args, **kwargs):
         self.key_name = self.key_name.upper()
         super(CategoryProperty, self).save(*args, **kwargs)
-        
-        assets = Asset.objects.filter(category=self.category)
 
-        # update assets with new required keys
+        # apply new required keys to assets
+        # TODO: put this in a celery task or other background
+        assets = Asset.objects.filter(category=self.category)
         for a in assets:
             a.save()
-        super(CategoryProperty, self).save(*args, **kwargs)
 
     def __str__(self):
         return "%s: %s" % (self.category.name, self.key_name)
@@ -49,7 +48,7 @@ class Location(models.Model):
 class Asset(models.Model):
     name = models.CharField(max_length=64)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    parent = models.ForeignKey('Asset', null=True, blank=True, on_delete=models.CASCADE)
+    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='asset_images/', null=True, blank=True)
