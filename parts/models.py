@@ -7,7 +7,7 @@ class Part(models.Model):
     on_hand = models.IntegerField(default=0)
     reorder_point = models.IntegerField(default=0)
     max_on_hand = models.IntegerField(default=0)
-    stocking_cost = models.DecimalField(max_digits=6, decimal_places=2)
+    stocking_cost = models.DecimalField(default=0, max_digits=6, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.postgres.fields import HStoreField
+from maintdx.parts.models import Part
 
 class Category(models.Model):
     name = models.CharField(max_length=64)
@@ -56,6 +57,7 @@ class Asset(models.Model):
     make = models.CharField(max_length=64)
     model = models.CharField(max_length=64)
     install_date = models.DateTimeField()
+    parts = models.ManyToManyField(Part)
     properties = HStoreField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
