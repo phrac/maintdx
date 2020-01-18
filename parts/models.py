@@ -1,4 +1,6 @@
 from django.db import models
+from maintdx.vendors.models import Vendor
+
 
 class Part(models.Model):
     part_number = models.CharField(max_length=32)
@@ -16,7 +18,7 @@ class Part(models.Model):
 
 class PartVendor(models.Model):
     part = models.ForeignKey(Part, on_delete=models.CASCADE)
-    #vendor = models.ForeignKey('Vendor', on_delete=models.CASCADE)
+    vendor = models.ForeignKey('Vendor', on_delete=models.CASCADE)
     url = models.URLField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
