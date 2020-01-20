@@ -47,7 +47,7 @@ class Location(models.Model):
 
 
 class Asset(models.Model):
-    name = models.CharField(max_length=64)
+    name = models.CharField(max_length=64, unique=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
@@ -57,7 +57,7 @@ class Asset(models.Model):
     make = models.CharField(max_length=64)
     model = models.CharField(max_length=64)
     install_date = models.DateTimeField()
-    parts = models.ManyToManyField(Part)
+    parts = models.ManyToManyField(Part, blank=True)
     properties = HStoreField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
