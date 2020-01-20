@@ -10,12 +10,12 @@ admin.autodiscover()
 
 router = routers.DefaultRouter()
 router.register(r'assets', views.AssetViewSet)
-router.register(r'asset_categories', views.CategoryViewSet)
+router.register(r'categories', views.CategoryViewSet)
 router.register(r'departments', views.DepartmentViewSet)
 router.register(r'locations', views.LocationViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include(router.urls)),
+    path('api/v1/', include(router.urls)),
     path('api/', include('rest_framework.urls', namespace='rest_framework'))
 ]
