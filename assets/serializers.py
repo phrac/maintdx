@@ -4,7 +4,7 @@ from rest_framework import serializers
 class AssetSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Asset
-        fields = ['name', 'category', 'parent', 'location', 'department',
+        fields = ['name', 'category', 'parent', 'department',
                   'serial_number', 'make', 'model', 'install_date', 'parts',
                   'properties']
 
@@ -21,4 +21,4 @@ class LocationSerializer(serializers.HyperlinkedModelSerializer):
 class DepartmentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Department
-        fields = ['name']
+        fields = ['name', 'location']

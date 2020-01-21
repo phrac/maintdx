@@ -13,9 +13,9 @@ class WorkOrder(models.Model):
     wo_type = models.ForeignKey(WorkOrderType, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    due_date = models.DateField()
-    work_instructions = models.TextField()
-
+    due_date = models.DateField(null=True)
+    work_instructions = models.TextField(null=True)
+   
 
     def __str__(self):
         return self.name
