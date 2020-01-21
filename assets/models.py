@@ -33,24 +33,23 @@ class CategoryProperty(models.Model):
     def __str__(self):
         return "%s: %s" % (self.category.name, self.key_name)
 
-class Department(models.Model):
-    name = models.CharField(max_length=64)
-
-    def __str__(self):
-        return self.name
-
 class Location(models.Model):
     name = models.CharField(max_length=64)
 
     def __str__(self):
         return self.name
+       
+class Department(models.Model):
+    name = models.CharField(max_length=64)
+    location = models.ForeignKey(Location, null=True, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.name
 
 class Asset(models.Model):
     name = models.CharField(max_length=64, unique=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE)
-    location = models.ForeignKey(Location, on_delete=models.CASCADE)
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='asset_images/', null=True, blank=True)
     serial_number = models.CharField(max_length=64, null=True)
