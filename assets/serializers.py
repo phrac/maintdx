@@ -1,24 +1,29 @@
-from maintdx.assets.models import Asset, Category, Department, Location
+from maintdx.assets import models as am
 from rest_framework import serializers
 
 class AssetSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Asset
+        model = am.Asset
         fields = ['name', 'category', 'parent', 'department',
                   'serial_number', 'make', 'model', 'install_date', 'parts',
                   'properties']
 
 class CategorySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Category
+        model = am.Category
         fields = ['name']
+
+class CategoryPropertySerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = am.CategoryProperty
+        fields = ['category', 'key_name', 'required']
 
 class LocationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Location
+        model = am.Location
         fields = ['name']
 
 class DepartmentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Department
+        model = am.Department
         fields = ['name', 'location']

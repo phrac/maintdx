@@ -12,6 +12,7 @@ admin.autodiscover()
 router = routers.DefaultRouter()
 router.register(r'assets', asset_views.AssetViewSet)
 router.register(r'categories', asset_views.CategoryViewSet)
+router.register(r'category_properties', asset_views.CategoryPropertyViewSet)
 router.register(r'departments', asset_views.DepartmentViewSet)
 router.register(r'locations', asset_views.LocationViewSet)
 
