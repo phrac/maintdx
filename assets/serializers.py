@@ -1,12 +1,15 @@
 from maintdx.assets import models as am
+from maintdx.workorders.serializers import WorkOrderSerializer
 from rest_framework import serializers
 
 class AssetSerializer(serializers.HyperlinkedModelSerializer):
+    work_orders = WorkOrderSerializer(many=True)
     class Meta:
         model = am.Asset
         fields = ['name', 'category', 'parent', 'department',
                   'serial_number', 'make', 'model', 'install_date', 'parts',
-                  'properties']
+                  'properties', 'work_orders']
+        depth = 1
 
 class CategorySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

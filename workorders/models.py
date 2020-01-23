@@ -9,11 +9,13 @@ class WorkOrderType(models.Model):
         return self.name
 
 class WorkOrder(models.Model):
-    asset = models.ForeignKey(Asset, on_delete=models.CASCADE)
+    asset = models.ForeignKey(Asset, related_name='work_orders', on_delete=models.CASCADE)
     wo_type = models.ForeignKey(WorkOrderType, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    closed = models.BooleanField(default=False)
     due_date = models.DateField(null=True)
+    description = models.CharField(max_length=256, blank=True, null=True)
     work_instructions = models.TextField(null=True)
    
 
