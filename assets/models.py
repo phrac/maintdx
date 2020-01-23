@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.postgres.fields import HStoreField
+from django.contrib.auth.models import User
 from maintdx.parts.models import Part
 
 class Category(models.Model):
@@ -60,6 +61,7 @@ class Asset(models.Model):
     properties = HStoreField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
