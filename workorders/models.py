@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from maintdx.assets.models import Asset
+from maintdx.parts.models import Part
 
 class WorkOrderType(models.Model):
     name = models.CharField(max_length=32)
@@ -35,6 +36,14 @@ class WorkOrderClock(models.Model):
     technician = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
-        self.interval = self.clock_out - self.clock_in
+        self.duration = self.clock_out - self.clock_in
         self.cost = self.technician.employee.salary * self.duration
         super(WorkOrderClock, self).save(*arg, **kwargs)
+
+class WorkOrderPart(models.Model):
+    work_order = models.ForeignKey(WorkOrder, on_delete=models.CASCADE)
+    part = models.ForeignKey(Part, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=0)
+
+    def save(self, *args, **kwargs):
+        part.consume_part(self.quantity)

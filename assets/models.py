@@ -5,6 +5,7 @@ from maintdx.parts.models import Part
 
 class Category(models.Model):
     name = models.CharField(max_length=64)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name_plural = 'Categories'
@@ -16,6 +17,7 @@ class CategoryProperty(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     key_name = models.CharField(max_length=32)
     required = models.BooleanField(default=True)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
         unique_together = ('category', 'key_name')
@@ -36,6 +38,7 @@ class CategoryProperty(models.Model):
 
 class Location(models.Model):
     name = models.CharField(max_length=64)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -43,6 +46,7 @@ class Location(models.Model):
 class Department(models.Model):
     name = models.CharField(max_length=64)
     location = models.ForeignKey(Location, null=True, on_delete=models.CASCADE)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -81,6 +85,7 @@ class AssetAttachment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     description = models.CharField(max_length=128)
     attachment = models.FileField(upload_to='asset_attachments/')
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.description
