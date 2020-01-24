@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 from maintdx.vendors.models import Vendor
-from maintdx.assets.models import Department
 
 
 class Part(models.Model):
@@ -24,7 +23,7 @@ class Part(models.Model):
         p = PartInventoryItem.objects.filter(part=self).order_by(purchase_date)
         p.current_on_hand = p.current_on_hand - quantity
         p.save()
-
+       
     def __str__(self):
         return "%s: %s" % (self.part_number, self.description)
 
@@ -42,10 +41,9 @@ class PartVendor(models.Model):
 class InventoryLocation(models.Model):
     code = models.CharField(max_length=16)
     description = models.CharField(max_length=256)
-    department = models.ForeignKey(Department, on_delete=models.CASCADE)
 
 class PartInventoryItem(models.Model):
-    part = model.ForeignKey(Part, on_delete=models.CASCADE)
+    part = models.ForeignKey(Part, on_delete=models.CASCADE)
     purchase_price = models.DecimalField(max_digits=5, decimal_places=2)
     vendor = models.ForeignKey(PartVendor, on_delete=models.CASCADE)
     purchase_date = models.DateTimeField(auto_now_add=True)
