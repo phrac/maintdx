@@ -20,7 +20,7 @@ class Part(models.Model):
         return q
 
     def consume_part(self, quantity=0):
-        p = PartInventoryItem.objects.filter(part=self).order_by(purchase_date)
+        p = PartInventoryItem.objects.get(part=self, current_on_hand__gt=0).order_by(purchase_date)
         p.current_on_hand = p.current_on_hand - quantity
         p.save()
        

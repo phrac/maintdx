@@ -25,6 +25,7 @@ class LocationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = am.Location
         fields = ['name']
+        depth = 1
 
 class DepartmentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
