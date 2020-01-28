@@ -1,14 +1,24 @@
 from maintdx.assets import models as am
+from django.conf import settings
 from maintdx.workorders.serializers import WorkOrderSerializer
 from rest_framework import serializers
 
 class AssetSerializer(serializers.HyperlinkedModelSerializer):
-    work_orders = WorkOrderSerializer(many=True)
+    image_url = serializers.SerializerMethodField('get_image_url')
+
+    def get_image_url(self, obj):
+        r = None
+        try:
+            r = settings.DEV_HOST + obj.image.url
+        except:
+            r = None
+        return r
+
     class Meta:
         model = am.Asset
-        fields = ['name', 'category', 'parent', 'department',
+        fields = ['id', 'url', 'name', 'category', 'parent', 'department',
                   'serial_number', 'make', 'model', 'install_date', 'parts',
-                  'properties', 'work_orders']
+                  'properties', 'image_url']
         depth = 1
 
 class CategorySerializer(serializers.HyperlinkedModelSerializer):
