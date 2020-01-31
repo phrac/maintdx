@@ -6,7 +6,7 @@ class VendorType(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.type
+        return self.vendor_type
 
 class Vendor(models.Model):
     name = models.CharField(max_length=32)

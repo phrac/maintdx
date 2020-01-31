@@ -6,7 +6,7 @@ from maintdx.vendors.models import Vendor
 class Part(models.Model):
     part_number = models.CharField(max_length=32)
     description = models.CharField(max_length=256)
-    image = models.ImageField(upload_to='part_images/')
+    image = models.ImageField(upload_to='part_images/', null=True, blank=True)
     reorder_point = models.IntegerField(default=0)
     max_on_hand = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -30,7 +30,7 @@ class Part(models.Model):
 class PartVendor(models.Model):
     part = models.ForeignKey(Part, on_delete=models.CASCADE)
     vendor = models.ForeignKey(Vendor, null=True, on_delete=models.CASCADE)
-    url = models.URLField()
+    url = models.URLField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)

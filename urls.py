@@ -8,6 +8,7 @@ from django.urls import path, include
 from rest_framework import routers
 from maintdx.assets import views as asset_views
 from maintdx.workorders import views as workorder_views
+from maintdx.parts import views as part_views
 from maintdx.users import views as user_views
 
 admin.autodiscover()
@@ -22,6 +23,7 @@ router.register(r'locations', asset_views.LocationViewSet)
 router.register(r'work_orders', workorder_views.WorkOrderViewSet)
 router.register(r'work_order_types', workorder_views.WorkOrderTypeViewSet)
 
+router.register(r'parts', part_views.PartViewSet)
 router.register(r'users', user_views.UserViewSet)
 
 urlpatterns = [
