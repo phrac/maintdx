@@ -24,6 +24,10 @@ router.register(r'work_orders', workorder_views.WorkOrderViewSet)
 router.register(r'work_order_types', workorder_views.WorkOrderTypeViewSet)
 
 router.register(r'parts', part_views.PartViewSet)
+router.register(r'part_vendors', part_views.PartVendorViewSet)
+router.register(r'inventory_locations', part_views.InventoryLocationViewSet)
+router.register(r'part_inventory_items', part_views.PartInventoryItemViewSet)
+
 router.register(r'users', user_views.UserViewSet)
 
 urlpatterns = [

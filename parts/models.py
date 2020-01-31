@@ -13,8 +13,9 @@ class Part(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    def get_on_hand_quanity(self):
+    def get_on_hand_quantity(self):
         items = PartInventoryItem.objects.filter(part=self)
+        q = 0
         for i in items:
             q += i.current_on_hand
         return q
@@ -41,6 +42,9 @@ class PartVendor(models.Model):
 class InventoryLocation(models.Model):
     code = models.CharField(max_length=16)
     description = models.CharField(max_length=256)
+
+    def __str__(self):
+        return "%s: %s" % (self.code, self.description)
 
 class PartInventoryItem(models.Model):
     part = models.ForeignKey(Part, on_delete=models.CASCADE)
