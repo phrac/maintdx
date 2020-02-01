@@ -1,11 +1,11 @@
 import graphene
-
 import maintdx.assets.schema
 
 
-class Query(maintdx.assets.schema.Query, graphene.ObjectType):
-    # This class will inherit from multiple Queries
-    # as we begin to add more apps to our project
+class Query(
+        maintdx.assets.schema.Query,
+        graphene.ObjectType
+):
     pass
 
 schema = graphene.Schema(query=Query)

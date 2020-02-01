@@ -7,7 +7,6 @@ class CategoryType(DjangoObjectType):
     class Meta:
         model = Category
 
-
 class AssetType(DjangoObjectType):
     class Meta:
         model = Asset
