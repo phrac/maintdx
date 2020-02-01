@@ -20,6 +20,9 @@ class Part(models.Model):
             q += i.current_on_hand
         return q
 
+    def get_on_hand_locations(self):
+        return PartInventoryItem.objects.filter(part=self, current_on_hand__gt=0)
+
     def consume_part(self, quantity=0):
         p = PartInventoryItem.objects.get(part=self, current_on_hand__gt=0).order_by(purchase_date)
         p.current_on_hand = p.current_on_hand - quantity

@@ -38,9 +38,7 @@ class Query(object):
         return Location.objects.all()
 
     def resolve_all_assets(self, info, **kwargs):
-        # We can easily optimize query count in the resolve method
         return Asset.objects.select_related('category').select_related('department').all()
 
     def resolve_asset(self, info, asset_id):
-        # Querying a single question
         return Asset.objects.get(pk=asset_id)
