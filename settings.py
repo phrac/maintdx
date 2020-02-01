@@ -22,6 +22,10 @@ REST_FRAMEWORK = {
 
 CORS_ORIGIN_ALLOW_ALL = True
 
+GRAPHENE = {
+    'SCHEMA': 'maintdx.schema.schema'
+}
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -35,6 +39,8 @@ INSTALLED_APPS = [
     'django_filters',
     'corsheaders',
     'rest_framework',
+    'graphene_django',
+   
     'maintdx.assets',
     'maintdx.parts',
     'maintdx.vendors',

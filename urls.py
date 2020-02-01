@@ -10,6 +10,7 @@ from maintdx.assets import views as asset_views
 from maintdx.workorders import views as workorder_views
 from maintdx.parts import views as part_views
 from maintdx.users import views as user_views
+from graphene_django.views import GraphQLView
 
 admin.autodiscover()
 
@@ -32,6 +33,7 @@ router.register(r'users', user_views.UserViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path(r'graphql/', GraphQLView.as_view(graphiql=True)),
     path('api/v1/', include(router.urls)),
     path('api/', include('rest_framework.urls', namespace='rest_framework'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
