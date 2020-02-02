@@ -1,64 +1,58 @@
 import graphene
-from graphene_django.types import DjangoObjectType
+from graphene_django import DjangoObjectType
+from graphene_django.filter import DjangoFilterConnectionField
+import django_filters
 import maintdx.parts.models as parts
 
-
-class PartInventoryItemType(DjangoObjectType):
+class PartInventoryItemNode(DjangoObjectType):
     class Meta:
         model = parts.PartInventoryItem
+        filter_fields = {
+            'part__id': ['exact'],
+            'part__part_number': ['exact', 'icontains', 'istartswith'],
+            'current_on_hand': ['exact', 'gt', 'lt', 'gte', 'lte'],
+        }
+        interfaces = (graphene.relay.Node, )
 
-class PartType(DjangoObjectType):
+class PartNode(DjangoObjectType):
     class Meta:
         model = parts.Part
+        exclude = ['image']
+        filter_fields = {
+            'reorder_point': ['gt', 'lt', 'gte', 'lte'],
+            'part_number': ['exact', 'icontains', 'istartswith'],
+            'description': ['icontains'],
+            'on_hand': ['exact', 'gt', 'lt', 'gte', 'lte']
+        }
+        interfaces = (graphene.relay.Node, )
 
-    on_hand = graphene.Int()
-    on_hand_locations = graphene.List(PartInventoryItemType)
-
-    def resolve_on_hand(self, info):
-        return self.get_on_hand_quantity()
-
-    def resolve_on_hand_locations(self, info):
-        return self.get_on_hand_locations()
-
-class PartVendorType(DjangoObjectType):
+class PartVendorNode(DjangoObjectType):
     class Meta:
         model = parts.PartVendor
+        filter_fields = {
+            'part__id': ['exact'],
+            'part__part_number': ['exact', 'icontains', 'istartswith'],
+            'vendor__id': ['exact'],
+            'vendor__name': ['exact', 'istartswith']
+        }
+        interfaces = (graphene.relay.Node, )
 
-class InventoryLocationType(DjangoObjectType):
+class InventoryLocationNode(DjangoObjectType):
     class Meta:
         model = parts.InventoryLocation
+        filter_fields = {
+            'code': ['exact', 'istartswith'],
+            'description': ['exact', 'istartswith', 'icontains']
+        }
+        interfaces = (graphene.relay.Node, )
 
-class Query(object):
-    all_parts = graphene.List(PartType)
-    all_part_vendors = graphene.List(PartVendorType)
-    all_inventory_locations = graphene.List(InventoryLocationType)
-    all_part_inventory_items = graphene.List(PartInventoryItemType)
+class Query(graphene.ObjectType):
+    all_parts = DjangoFilterConnectionField(PartNode)
+    all_part_vendors = DjangoFilterConnectionField(PartVendorNode)
+    all_inventory_locations = DjangoFilterConnectionField(InventoryLocationNode)
+    all_part_inventory_items = DjangoFilterConnectionField(PartInventoryItemNode)
 
-    part = graphene.Field(PartType, part_id=graphene.Int())
-    part_vendor = graphene.Field(PartVendorType, vendor_id=graphene.Int())
-    inventory_location = graphene.Field(InventoryLocationType, invloc_id=graphene.Int())
-    part_inventory_item = graphene.Field(PartInventoryItemType, pii_id=graphene.Int())
-
-    def resolve_all_parts(self, info, **kwargs):
-        return parts.Part.objects.all()
-
-    def resolve_all_part_vendors(self, info, **kwargs):
-        return parts.PartVendor.objects.all()
-
-    def resolve_all_inventory_locations(self, info, **kwargs):
-        return parts.InventoryLocation.objects.all()
-
-    def resolve_all_part_inventory_items(self, info, **kwargs):
-        return parts.Part.objects.all()
-
-    def resolve_part(self, info, part_id):
-        return parts.Part.objects.get(pk=part_id)
-
-    def resolve_part_vendor(self, info, partvendor_id):
-        return parts.PartVendor.objects.get(pk=partvendor_id)
-
-    def resolve_inventory_location(self, info, invloc_id):
-        return parts.InventoryLocation.objects.get(pk=invloc_id)
-
-    def resolve_part_inventory_item(self, info, pii_id):
-        return parts.PartInventoryItem.objects.get(pk=pii_id)
+    part = graphene.Node.Field(PartNode)
+    part_vendor = graphene.Node.Field(PartVendorNode)
+    inventory_location = graphene.Node.Field(InventoryLocationNode)
+    part_inventory_item = graphene.Node.Field(PartInventoryItemNode)
