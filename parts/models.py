@@ -13,14 +13,6 @@ class Part(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    def update_on_hand_quantity(self):
-        agg = PartInventoryItem.objects.filter(part=self).aggregate(models.Sum('current_on_hand'))
-        count = agg['current_on_hand__sum']
-        if count is None:
-            count = 0
-        self.on_hand = count
-        self.save()
-
     def get_on_hand_locations(self):
         return PartInventoryItem.objects.filter(part=self, current_on_hand__gt=0)
 
@@ -28,9 +20,7 @@ class Part(models.Model):
         p = PartInventoryItem.objects.get(part=self, current_on_hand__gt=0).order_by(purchase_date)
         p.current_on_hand = p.current_on_hand - quantity
         p.save()
-        self.on_hand = self.update_on_hand_quantity()
-        self.save()
-       
+
     def __str__(self):
         return "%s: %s" % (self.part_number, self.description)
 
@@ -62,6 +52,4 @@ class PartInventoryItem(models.Model):
     purchase_order_number = models.CharField(max_length=32)
     inventory_location = models.ForeignKey(InventoryLocation, on_delete=models.CASCADE)
 
-    def save(self, *args, **kwargs):
-        super(PartInventoryItem, self).save(*args, **kwargs)
-        self.part.update_on_hand_quantity()
+    # post_save signal in .signals to update parent part on_hand

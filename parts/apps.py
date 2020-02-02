@@ -1,5 +1,7 @@
 from django.apps import AppConfig
 
-
 class PartsConfig(AppConfig):
-    name = 'parts'
+    name = 'maintdx.parts'
+
+    def ready(self):
+        import maintdx.parts.signals

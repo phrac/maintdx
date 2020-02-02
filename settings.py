@@ -35,7 +35,7 @@ INSTALLED_APPS = [
     'graphene_django',
    
     'maintdx.assets',
-    'maintdx.parts',
+    'maintdx.parts.apps.PartsConfig',
     'maintdx.vendors',
     'maintdx.workorders',
     'maintdx.users',

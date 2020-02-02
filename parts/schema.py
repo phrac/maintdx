@@ -17,9 +17,8 @@ class PartInventoryItemNode(DjangoObjectType):
 class PartNode(DjangoObjectType):
     class Meta:
         model = parts.Part
-        exclude = ['image']
         filter_fields = {
-            'reorder_point': ['gt', 'lt', 'gte', 'lte'],
+            'reorder_point': ['exact', 'gt', 'lt', 'gte', 'lte'],
             'part_number': ['exact', 'icontains', 'istartswith'],
             'description': ['icontains'],
             'on_hand': ['exact', 'gt', 'lt', 'gte', 'lte']
