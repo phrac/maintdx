@@ -1,56 +1,70 @@
 import graphene
-from graphene_django.types import DjangoObjectType
+from graphene_django import DjangoObjectType
+from graphene_django.filter import DjangoFilterConnectionField
+import django_filters
 import maintdx.assets.models as assets
 
-
-class CategoryType(DjangoObjectType):
+class CategoryNode(DjangoObjectType):
     class Meta:
         model = assets.Category
+        filter_fields = {
+            'name': ['exact', 'istartswith', 'icontains'],
+        }
+        interfaces = (graphene.relay.Node, )
 
-class AssetType(DjangoObjectType):
-    class Meta:
-        model = assets.Asset
-
-class DepartmentType(DjangoObjectType):
-    class Meta:
-        model = assets.Department
-
-class LocationType(DjangoObjectType):
+class LocationNode(DjangoObjectType):
     class Meta:
         model = assets.Location
+        filter_fields = {
+            'name': ['exact', 'istartswith', 'icontains'],
+        }
+        interfaces = (graphene.relay.Node, )
 
+class DepartmentNode(DjangoObjectType):
+    class Meta:
+        model = assets.Department
+        filter_fields = {
+            'name': ['exact', 'istartswith', 'icontains'],
+            'location__id': ['exact'],
+            'location__name': ['exact', 'istartswith', 'icontains'],
+        }
+        interfaces = (graphene.relay.Node, )
 
-class Query(object):
-    all_categories = graphene.List(CategoryType)
-    all_assets = graphene.List(AssetType)
-    all_departments = graphene.List(DepartmentType)
-    all_locations = graphene.List(LocationType)
+class AssetNode(DjangoObjectType):
+    class Meta:
+        model = assets.Asset
+        filter_fields = {
+            'name': ['exact', 'istartswith', 'icontains'],
+            'description': ['exact', 'istartswith', 'icontains'],
+            'category__id': ['exact'],
+            'category__name': ['exact', 'istartswith', 'icontains'],
+            'parent__id': ['exact'],
+            'department__id': ['exact'],
+            'department__name': ['exact', 'istartswith', 'icontains'],
+            'serial_number': ['exact', 'istartswith', 'icontains'],
+            'make': ['exact', 'istartswith', 'icontains'],
+            'model': ['exact', 'istartswith', 'icontains'],
+        }
+        interfaces = (graphene.relay.Node, )
 
-    asset = graphene.Field(AssetType, asset_id=graphene.Int())
-    category = graphene.Field(CategoryType, category_id=graphene.Int())
-    department = graphene.Field(DepartmentType, department_id=graphene.Int())
-    location = graphene.Field(LocationType, location_id=graphene.Int())
+class AssetAttachmentNode(DjangoObjectType):
+    class Meta:
+        model = assets.AssetAttachment
+        filter_fields = {
+            'asset__id': ['exact'],
+            'asset__name': ['exact', 'istartswith', 'icontains']
+        }
+        interfaces = (graphene.relay.Node, )
 
-    def resolve_all_categories(self, info, **kwargs):
-        return assets.Category.objects.all()
+class Query(graphene.ObjectType):
+    all_categories = DjangoFilterConnectionField(CategoryNode)
+    all_locations = DjangoFilterConnectionField(LocationNode)
+    all_departments = DjangoFilterConnectionField(DepartmentNode)
+    all_assets = DjangoFilterConnectionField(AssetNode)
+    all_asset_attachments = DjangoFilterConnectionField(AssetAttachmentNode)
 
-    def resolve_all_departments(self, info, **kwargs):
-        return assets.Department.objects.all()
-
-    def resolve_all_locations(self, info, **kwargs):
-        return assets.Location.objects.all()
-
-    def resolve_all_assets(self, info, **kwargs):
-        return assets.Asset.objects.select_related('category').select_related('department').all()
-
-    def resolve_asset(self, info, asset_id):
-        return assets.Asset.objects.get(pk=asset_id)
-
-    def resolve_category(self, info, category_id):
-        return assets.Category.objects.get(pk=category_id)
-
-    def resolve_department(self, info, department_id):
-        return assets.Department.objects.get(pk=department_id)
-
-    def resolve_location(self, info, location_id):
-        return assets.Location.objects.get(pk=location_id)
+    category = graphene.Node.Field(CategoryNode)
+    location = graphene.Node.Field(LocationNode)
+    department = graphene.Node.Field(DepartmentNode)
+    asset = graphene.Node.Field(AssetNode)
+    asset_attachment = graphene.Node.Field(AssetAttachmentNode)

@@ -53,6 +53,7 @@ class Department(models.Model):
 
 class Asset(models.Model):
     name = models.CharField(max_length=64, unique=True)
+    description = models.CharField(max_length=256, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE)
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
