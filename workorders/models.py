@@ -12,6 +12,7 @@ class WorkOrderType(models.Model):
         return self.name
 
 class WorkOrder(models.Model):
+    wo_id = models.CharField(max_length=16, default=0)
     asset = models.ForeignKey(Asset, related_name='work_orders', on_delete=models.CASCADE)
     wo_type = models.ForeignKey(WorkOrderType, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
