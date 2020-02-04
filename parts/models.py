@@ -17,9 +17,18 @@ class Part(models.Model):
         return PartInventoryItem.objects.filter(part=self, current_on_hand__gt=0)
 
     def consume_part(self, quantity=0):
-        p = PartInventoryItem.objects.get(part=self, current_on_hand__gt=0).order_by(purchase_date)
-        p.current_on_hand = p.current_on_hand - quantity
-        p.save()
+        pii = PartInventoryItem.objects.filter(part=self, current_on_hand__gt=0).order_by(purchase_date)
+        while quantity > 0:
+            for p in pii:
+                if p.current_on_hand <= quantity:
+                    quantity -= p.current_on_hand
+                    p.current_on_hand = 0
+                    p.save()
+                else:
+                    p.current_on_hand -= quantity
+                    p.save()
+                    quantity = 0
+            return p.purchase_price
 
     def __str__(self):
         return "%s: %s" % (self.part_number, self.description)
@@ -47,8 +56,8 @@ class PartInventoryItem(models.Model):
     purchase_price = models.DecimalField(max_digits=5, decimal_places=2)
     vendor = models.ForeignKey(PartVendor, on_delete=models.CASCADE)
     purchase_date = models.DateTimeField(auto_now_add=True)
-    purchase_quantity = models.IntegerField(default=0)
-    current_on_hand = models.IntegerField(default=0)
+    purchase_quantity = models.PositiveIntegerField(default=0)
+    current_on_hand = models.PositiveIntegerField(default=0)
     purchase_order_number = models.CharField(max_length=32)
     inventory_location = models.ForeignKey(InventoryLocation, on_delete=models.CASCADE)
 

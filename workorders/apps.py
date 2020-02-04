@@ -2,4 +2,7 @@ from django.apps import AppConfig
 
 
 class WorkordersConfig(AppConfig):
-    name = 'workorders'
+    name = 'maintdx.workorders'
+
+    def ready(self):
+        import maintdx.workorders.signals

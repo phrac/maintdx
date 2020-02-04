@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'maintdx.assets',
     'maintdx.parts.apps.PartsConfig',
     'maintdx.vendors',
-    'maintdx.workorders',
+    'maintdx.workorders.apps.WorkordersConfig',
     'maintdx.users',
 ]
 
