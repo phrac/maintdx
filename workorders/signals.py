@@ -9,7 +9,6 @@ def update_work_order_parts(sender, instance, **kwargs):
         wop = WorkOrderPart.objects.filter(work_order=instance)
         for w in wop:
             if w.processed is False:
-                part_cost = w.part.consume_part(w.quantity)
-                w.consumed_cost = part_cost * w.quantity
+                w.consumed_cost = w.part.consume_part(w.quantity)
                 w.processed = True
                 w.save()

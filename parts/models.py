@@ -18,17 +18,20 @@ class Part(models.Model):
 
     def consume_part(self, quantity=0):
         pii = PartInventoryItem.objects.filter(part=self, current_on_hand__gt=0).order_by(purchase_date)
+        total_cost = 0
         while quantity > 0:
             for p in pii:
                 if p.current_on_hand <= quantity:
+                    total_cost += p.current_on_hand * p.purchase_price
                     quantity -= p.current_on_hand
                     p.current_on_hand = 0
                     p.save()
                 else:
+                    total_cost += p.purachase_price * quantity
                     p.current_on_hand -= quantity
                     p.save()
                     quantity = 0
-            return p.purchase_price
+        return total_cost
 
     def __str__(self):
         return "%s: %s" % (self.part_number, self.description)
