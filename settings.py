@@ -56,7 +56,7 @@ DEV_HOST = 'http://127.0.0.1:8000'
 ROOT_URLCONF = 'maintdx.urls'
 MEDIA_ROOT = '/home/derek/code/maintdx/maintdx/media/'
 MEDIA_URL = '/media/'
-
+ABSOLUTE_MEDIA_URL = "%s%s" % (DEV_HOST, MEDIA_URL)
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

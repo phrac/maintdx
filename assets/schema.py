@@ -3,6 +3,7 @@ from graphene_django import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
 import django_filters
 import maintdx.assets.models as assets
+from django.conf import settings
 
 class CategoryNode(DjangoObjectType):
     class Meta:
@@ -31,6 +32,10 @@ class DepartmentNode(DjangoObjectType):
         interfaces = (graphene.relay.Node, )
 
 class AssetNode(DjangoObjectType):
+    image_url = graphene.String()
+    def resolve_image_url(self, info):
+        return f"{settings.ABSOLUTE_MEDIA_URL}{self.image}"
+
     class Meta:
         model = assets.Asset
         filter_fields = {
