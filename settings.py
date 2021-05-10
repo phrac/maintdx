@@ -11,7 +11,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get('MAINTDX_SECRET_KEY')
 
 DEBUG = True
-
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 ALLOWED_HOSTS = []
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'maintdx.assets',
     'maintdx.parts.apps.PartsConfig',
     'maintdx.vendors',
-    'maintdx.workorders.apps.WorkordersConfig',
+    'maintdx.workorders',
     'maintdx.users',
 ]
 
