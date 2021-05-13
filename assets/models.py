@@ -16,6 +16,9 @@ class Category(models.Model):
         return self.name
 
 
+# AssetGroups are way to associate similar assets: for example,
+# if a plant has more than one of the same model of lift truck,
+# the assetgroup can share parts, documents, etc
 class AssetGroup(models.Model):
     name = models.CharField(max_length=32)
     parts = models.ManyToManyField(Part, blank=True)
@@ -23,6 +26,18 @@ class AssetGroup(models.Model):
 
     class Meta:
         verbose_name_plural = "Asset Groups"
+
+    def __str__(self):
+        return self.name
+
+
+# AssetStatus is used to track how an asset is being used, i.e. if
+# an asset is still used in production, is in the process of being
+# re-tooled, etc
+class AssetStatus(models.Model):
+    name = models.CharField(max_length=32)
+    short_name = models.CharField(max_length=4)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -75,6 +90,7 @@ class Asset(models.Model):
     description = models.CharField(max_length=256, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     asset_groups = models.ManyToManyField(AssetGroup, blank=True)
+    asset_status = models.ForeignKey(AssetStatus, on_delete=models.CASCADE, null=True)
     parent = models.ForeignKey("self", null=True, blank=True, on_delete=models.CASCADE)
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
     image = models.ImageField(upload_to="asset_images/", null=True, blank=True)
