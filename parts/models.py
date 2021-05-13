@@ -2,10 +2,11 @@ from django.db import models
 from django.contrib.auth.models import User
 from maintdx.vendors.models import Vendor
 
+
 class Part(models.Model):
     part_number = models.CharField(max_length=32)
     description = models.CharField(max_length=256)
-    image = models.ImageField(upload_to='part_images/', null=True, blank=True)
+    image = models.ImageField(upload_to="part_images/", null=True, blank=True)
     on_hand = models.IntegerField(default=0)
     reorder_point = models.IntegerField(default=0)
     max_on_hand = models.IntegerField(default=0)
@@ -17,7 +18,9 @@ class Part(models.Model):
         return PartInventoryItem.objects.filter(part=self, current_on_hand__gt=0)
 
     def consume_part(self, quantity=0):
-        pii = PartInventoryItem.objects.filter(part=self, current_on_hand__gt=0).order_by(purchase_date)
+        pii = PartInventoryItem.objects.filter(
+            part=self, current_on_hand__gt=0
+        ).order_by(purchase_date)
         total_cost = 0
         while quantity > 0:
             for p in pii:
@@ -36,6 +39,7 @@ class Part(models.Model):
     def __str__(self):
         return "%s: %s" % (self.part_number, self.description)
 
+
 class PartVendor(models.Model):
     part = models.ForeignKey(Part, on_delete=models.CASCADE)
     vendor = models.ForeignKey(Vendor, null=True, on_delete=models.CASCADE)
@@ -47,12 +51,14 @@ class PartVendor(models.Model):
     def __str__(self):
         return "%s: %s" % (self.vendor.name, self.part.part_number)
 
+
 class InventoryLocation(models.Model):
     code = models.CharField(max_length=16)
     description = models.CharField(max_length=256)
 
     def __str__(self):
         return "%s: %s" % (self.code, self.description)
+
 
 class PartInventoryItem(models.Model):
     part = models.ForeignKey(Part, on_delete=models.CASCADE)

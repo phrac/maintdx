@@ -3,6 +3,7 @@ from django.dispatch import receiver
 
 from maintdx.workorders.models import WorkOrder, WorkOrderPart
 
+
 @receiver(models.signals.post_save, sender=WorkOrder)
 def update_work_order_parts(sender, instance, **kwargs):
     if instance.closed is True:

@@ -4,45 +4,44 @@ from graphene_django.filter import DjangoFilterConnectionField
 import django_filters
 import maintdx.workorders.models as workorders
 
+
 class WorkOrderTypeNode(DjangoObjectType):
     class Meta:
         model = workorders.WorkOrderType
         filter_fields = {
-            'id': ['exact'],
-            'name': ['exact', 'icontains', 'istartswith'],
-            'short_name': ['exact', 'icontains', 'istartswith'],
+            "id": ["exact"],
+            "name": ["exact", "icontains", "istartswith"],
+            "short_name": ["exact", "icontains", "istartswith"],
         }
-        interfaces = (graphene.relay.Node, )
+        interfaces = (graphene.relay.Node,)
+
 
 class WorkOrderNode(DjangoObjectType):
     class Meta:
         model = workorders.WorkOrder
         filter_fields = {
-            'wo_id': ['exact'],
-            'asset__id': ['exact'],
-            'wo_type__id': ['exact'],
-            'closed': ['exact'],
-            'due_date': ['exact', 'gt', 'lt', 'gte', 'lte'],
+            "wo_id": ["exact"],
+            "asset__id": ["exact"],
+            "wo_type__id": ["exact"],
+            "closed": ["exact"],
+            "due_date": ["exact", "gt", "lt", "gte", "lte"],
         }
-        interfaces = (graphene.relay.Node, )
+        interfaces = (graphene.relay.Node,)
+
 
 class WorkOrderClockNode(DjangoObjectType):
     class Meta:
         model = workorders.WorkOrderClock
-        filter_fields = {
-            'work_order__id': ['exact'],
-            'technician__id': ['exact'],
-        }
-        interfaces = (graphene.relay.Node, )
+        filter_fields = {"work_order__id": ["exact"], "technician__id": ["exact"]}
+        interfaces = (graphene.relay.Node,)
+
 
 class WorkOrderPartNode(DjangoObjectType):
     class Meta:
         model = workorders.WorkOrderPart
-        filter_fields = {
-            'work_order__id': ['exact'],
-            'part__id': ['exact'],
-        }
-        interfaces = (graphene.relay.Node, )
+        filter_fields = {"work_order__id": ["exact"], "part__id": ["exact"]}
+        interfaces = (graphene.relay.Node,)
+
 
 class Query(graphene.ObjectType):
     all_work_order_types = DjangoFilterConnectionField(WorkOrderTypeNode)
