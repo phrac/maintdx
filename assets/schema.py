@@ -31,6 +31,12 @@ class DepartmentNode(DjangoObjectType):
         interfaces = (graphene.relay.Node,)
 
 
+class AssetStatusNode(DjangoObjectType):
+    class Meta:
+        model = assets.AssetStatus
+        interfaces = (graphene.relay.Node,)
+
+
 class AssetGroupNode(DjangoObjectType):
     class Meta:
         model = assets.AssetGroup
@@ -82,4 +88,5 @@ class Query(graphene.ObjectType):
     department = graphene.Node.Field(DepartmentNode)
     asset = graphene.Node.Field(AssetNode)
     asset_group = graphene.Node.Field(AssetGroupNode)
+    asset_status = graphene.Node.Field(AssetStatusNode)
     asset_attachment = graphene.Node.Field(AssetAttachmentNode)
