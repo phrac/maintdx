@@ -21,7 +21,6 @@ class Category(models.Model):
 # the assetgroup can share parts, documents, etc
 class AssetGroup(models.Model):
     name = models.CharField(max_length=32)
-    parts = models.ManyToManyField(Part, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
@@ -121,6 +120,7 @@ class Asset(models.Model):
 
 class AssetAttachment(models.Model):
     asset = models.ForeignKey(Asset, on_delete=models.CASCADE)
+    asset_groups = models.ManyToManyField(AssetGroup, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     description = models.CharField(max_length=128)
     attachment = models.FileField(upload_to="asset_attachments/")

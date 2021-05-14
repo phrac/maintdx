@@ -1,10 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import User
 from maintdx.vendors.models import Vendor
+from django.apps import apps
 
 
 class Part(models.Model):
     part_number = models.CharField(max_length=32)
+    asset_groups = models.ManyToManyField("assets.AssetGroup", blank=True)
     description = models.CharField(max_length=256)
     image = models.ImageField(upload_to="part_images/", null=True, blank=True)
     on_hand = models.IntegerField(default=0)
